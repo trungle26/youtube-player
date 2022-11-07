@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+
+    <!-- RecyclerView will show the result in a ordered manner
+    by infalting the video_item.xml which has the CardView set to show
+    Thumbnail, Video title, id and short description -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/videos_recycler_view_3"
+        android:layout_width="300dp"
+        android:layout_height="match_parent"/>
+
+    <com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
+        android:id="@+id/youtube_player_view_3"
+        android:layout_width="650dp"
+        android:layout_height="match_parent"
+        android:layout_alignParentEnd="true" />
+
+
+</RelativeLayout>
