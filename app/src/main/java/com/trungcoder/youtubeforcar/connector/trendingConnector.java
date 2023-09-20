@@ -68,7 +68,8 @@ public class trendingConnector {
         try {
 
             request = youtubeService.videos()
-                    .list("snippet,contentDetails,statistics");
+                    .list("snippet,contentDetails,statistics")
+                    .setChart("mostPopular");
 
             //setting API key to query
             // Set your developer key from the {{ Google Cloud Console }} for
@@ -102,9 +103,7 @@ public class trendingConnector {
         try {
 
             //executing prepared query and calling Youtube API
-            VideoListResponse response = request.setChart("mostPopular")
-                    .setRegionCode("VN")
-                    .execute();
+            VideoListResponse response = request.execute();
 
             //retrieving list from response received
             //getItems method returns a list from the response which is originally in the form of JSON

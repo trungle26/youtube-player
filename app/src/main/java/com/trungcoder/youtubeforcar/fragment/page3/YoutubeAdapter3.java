@@ -1,5 +1,7 @@
 package com.trungcoder.youtubeforcar.fragment.page3;
 
+import static com.trungcoder.youtubeforcar.MainActivity.youTubePlayerView;
+
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,22 +18,7 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.You
 import com.squareup.picasso.Picasso;
 import com.trungcoder.youtubeforcar.R;
 import com.trungcoder.youtubeforcar.VideoItem;
-import com.trungcoder.youtubeforcar.fragment.page2.page2;
 
-import org.schabi.newpipe.extractor.MediaFormat;
-import org.schabi.newpipe.extractor.NewPipe;
-import org.schabi.newpipe.extractor.ServiceList;
-import org.schabi.newpipe.extractor.downloader.Downloader;
-import org.schabi.newpipe.extractor.downloader.Request;
-import org.schabi.newpipe.extractor.downloader.Response;
-import org.schabi.newpipe.extractor.exceptions.ExtractionException;
-import org.schabi.newpipe.extractor.exceptions.ReCaptchaException;
-import org.schabi.newpipe.extractor.localization.Localization;
-import org.schabi.newpipe.extractor.services.youtube.extractors.YoutubeStreamExtractor;
-import org.schabi.newpipe.extractor.stream.AudioStream;
-import org.schabi.newpipe.extractor.stream.StreamInfo;
-
-import java.io.IOException;
 import java.util.List;
 
 public class YoutubeAdapter3 extends RecyclerView.Adapter<YoutubeAdapter3.MyViewHolder> {
@@ -43,7 +30,6 @@ public class YoutubeAdapter3 extends RecyclerView.Adapter<YoutubeAdapter3.MyView
     // Complex data items may need more than one view per item, and
     // you provide access to all the views for a data item in a view holder
     public class MyViewHolder extends RecyclerView.ViewHolder{
-
 
         public ImageView thumbnail;
         public TextView video_title, video_id, video_description;
@@ -88,7 +74,7 @@ public class YoutubeAdapter3 extends RecyclerView.Adapter<YoutubeAdapter3.MyView
         final VideoItem singleVideo = mVideoList.get(position);
 
         // replace the default text with id, title and description with setText method
-        holder.video_id.setText(singleVideo.getId()+" ");
+        holder.video_id.setText("Video ID: "+singleVideo.getId()+" ");
         holder.video_title.setText(singleVideo.getTitle());
         holder.video_description.setText(singleVideo.getDescription());
 
@@ -117,10 +103,13 @@ public class YoutubeAdapter3 extends RecyclerView.Adapter<YoutubeAdapter3.MyView
         holder.video_view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String url = "https://www.youtube.com/watch?v=__CRWE-L45k";
-                page3.tvVideoUrl.setText(url);
 
-
+                youTubePlayerView.getYouTubePlayerWhenReady(new YouTubePlayerCallback() {
+                    @Override
+                    public void onYouTubePlayer(@NonNull YouTubePlayer youTubePlayer) {
+                        youTubePlayer.loadVideo(singleVideo.getId(),0);
+                    }
+                });
             }
         });
 

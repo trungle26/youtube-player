@@ -1,5 +1,7 @@
 package com.trungcoder.youtubeforcar.fragment.page1;
 
+import static com.trungcoder.youtubeforcar.MainActivity.youTubePlayerView;
+
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -102,7 +104,7 @@ public class YoutubeAdapter1 extends RecyclerView.Adapter<YoutubeAdapter1.MyView
             @Override
             public void onClick(View view) {
 
-                page1.youTubePlayerView.getYouTubePlayerWhenReady(new YouTubePlayerCallback() {
+                youTubePlayerView.getYouTubePlayerWhenReady(new YouTubePlayerCallback() {
                     @Override
                     public void onYouTubePlayer(@NonNull YouTubePlayer youTubePlayer) {
                         youTubePlayer.loadVideo(singleVideo.getId(),0);

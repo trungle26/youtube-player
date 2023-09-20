@@ -1,5 +1,7 @@
 package com.trungcoder.youtubeforcar.fragment.page1;
 
+import static com.trungcoder.youtubeforcar.MainActivity.youTubePlayerView;
+
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
@@ -19,8 +21,11 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.customui.DefaultPlayerUiController;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer;
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.YouTubePlayerCallback;
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.options.IFramePlayerOptions;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView;
 import com.trungcoder.youtubeforcar.R;
 import com.trungcoder.youtubeforcar.VideoItem;
@@ -59,8 +64,6 @@ public class page1 extends Fragment {
     //int the array list has id, title, description and thumbnail url
     private List<VideoItem> searchResults;
 
-
-    public static YouTubePlayerView youTubePlayerView ;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -112,7 +115,7 @@ public class page1 extends Fragment {
         mProgressDialog = new ProgressDialog(rootView.getContext());
         searchInput = (EditText)rootView.findViewById(R.id.search_input);
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.videos_recycler_view);
-        youTubePlayerView = rootView.findViewById(R.id.youtube_player_view);
+
 
         //setting title and and style for progress dialog so that users can understand
         //what is happening currently

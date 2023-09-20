@@ -1,5 +1,7 @@
 package com.trungcoder.youtubeforcar.fragment.page2;
 
+import static com.trungcoder.youtubeforcar.MainActivity.youTubePlayerView;
+
 import android.app.ProgressDialog;
 import android.os.Bundle;
 
@@ -51,8 +53,6 @@ public class page2 extends Fragment {
     private List<VideoItem> searchResults2;
 
 
-    public static YouTubePlayerView youTubePlayerView2 ;
-
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -102,7 +102,6 @@ public class page2 extends Fragment {
         //initailising the objects with their respective view in activity_main.xml file
         mProgressDialog = new ProgressDialog(rootView.getContext());
         mRecyclerView2 = (RecyclerView) rootView.findViewById(R.id.videos_recycler_view_2);
-        youTubePlayerView2 = rootView.findViewById(R.id.youtube_player_view_2);
 
         //setting title and and style for progress dialog so that users can understand
         //what is happening currently
@@ -172,13 +171,7 @@ public class page2 extends Fragment {
 
         //notify the Adapter that the data has been downloaded so that list can be updapted
         youtubeAdapter2.notifyDataSetChanged();
-        //TODO: auto play
-        youTubePlayerView2.getYouTubePlayerWhenReady(new YouTubePlayerCallback() {
-            @Override
-            public void onYouTubePlayer(@NonNull YouTubePlayer youTubePlayer) {
-                youTubePlayer.cueVideo(searchResults2.get(0).getId(),0);
-            }
-        });
+        
     }
 
 }

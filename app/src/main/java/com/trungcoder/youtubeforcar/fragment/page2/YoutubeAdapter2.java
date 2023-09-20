@@ -1,5 +1,7 @@
 package com.trungcoder.youtubeforcar.fragment.page2;
 
+import static com.trungcoder.youtubeforcar.MainActivity.youTubePlayerView;
+
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,7 +18,6 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.You
 import com.squareup.picasso.Picasso;
 import com.trungcoder.youtubeforcar.R;
 import com.trungcoder.youtubeforcar.VideoItem;
-import com.trungcoder.youtubeforcar.fragment.page1.page1;
 
 import java.util.List;
 
@@ -103,7 +104,7 @@ public class YoutubeAdapter2 extends RecyclerView.Adapter<YoutubeAdapter2.MyView
             @Override
             public void onClick(View view) {
 
-                page2.youTubePlayerView2.getYouTubePlayerWhenReady(new YouTubePlayerCallback() {
+                youTubePlayerView.getYouTubePlayerWhenReady(new YouTubePlayerCallback() {
                     @Override
                     public void onYouTubePlayer(@NonNull YouTubePlayer youTubePlayer) {
                         youTubePlayer.loadVideo(singleVideo.getId(),0);
