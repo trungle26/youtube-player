@@ -59,7 +59,7 @@ dependencies {
     implementation 'com.google.api-client:google-api-client-gson:1.30.11'
 
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.3'
-    implementation "com.github.teamnewpipe:NewPipeExtractor:v0.22.7"
+    implementation "androidx.media:media:1.6.0"
 
 
 

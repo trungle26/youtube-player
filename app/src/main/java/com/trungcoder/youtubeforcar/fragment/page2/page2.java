@@ -171,7 +171,7 @@ public class page2 extends Fragment {
 
         //notify the Adapter that the data has been downloaded so that list can be updapted
         youtubeAdapter2.notifyDataSetChanged();
-        
+
     }
 
 }

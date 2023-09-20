@@ -1,6 +1,12 @@
 package com.trungcoder.youtubeforcar;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.ActivityInfo;
 import android.os.Build;
 import android.os.Bundle;
@@ -18,7 +24,6 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer;
-import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.FullscreenListener;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.options.IFramePlayerOptions;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView;
@@ -31,8 +36,9 @@ public class MainActivity extends AppCompatActivity {
 
     private TabLayout tabLayout;
     private ViewPager2 viewPager2;
-    private static YouTubePlayer youTubePlayer;
+    public static YouTubePlayer youTubePlayer;
     public static YouTubePlayerView youTubePlayerView;
+    public static IFramePlayerOptions iFramePlayerOptions;
 
     //ProgressDialog can be shown while downloading data from the internet
     //which indicates that the query is being processed
@@ -50,10 +56,19 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
+    private final BroadcastReceiver exit = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            finish();
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        registerReceiver(exit, new IntentFilter("STOP"));
 
         tabLayout = findViewById(R.id.tabs);
         viewPager2 = findViewById(R.id.view_pager);
@@ -83,6 +98,11 @@ public class MainActivity extends AppCompatActivity {
             return view.onApplyWindowInsets(windowInsets);
         }));
 
+        if(Build.VERSION.SDK_INT > Build.VERSION_CODES.O){
+            NotificationChannel channel = new NotificationChannel("running_channel", "Running notifications", NotificationManager.IMPORTANCE_HIGH);
+            NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            notificationManager.createNotificationChannel(channel);
+        }
 
         String[] labels = {"Youtube","Nhạc US-UK","Truyện nói"};
         (new TabLayoutMediator(tabLayout, viewPager2,
@@ -93,11 +113,13 @@ public class MainActivity extends AppCompatActivity {
                     }
                 })).attach();
 
-        IFramePlayerOptions iFramePlayerOptions = new IFramePlayerOptions.Builder()
+        youTubePlayerView.setEnableAutomaticInitialization(false);
+
+        iFramePlayerOptions = new IFramePlayerOptions.Builder()
                 .controls(1)
                 .fullscreen(1)
                 .build();
-        youTubePlayerView.setEnableAutomaticInitialization(false);
+
         youTubePlayerView.addFullscreenListener(new FullscreenListener() {
             @Override
             public void onEnterFullscreen(@NonNull View fullscreenView, @NonNull Function0<Unit> function0) {
@@ -118,14 +140,19 @@ public class MainActivity extends AppCompatActivity {
                 setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
             }
         });
-        youTubePlayerView.initialize(new AbstractYouTubePlayerListener() {
-            @Override
-            public void onReady(@NonNull YouTubePlayer youTubePlayer) {
-                MainActivity.youTubePlayer = youTubePlayer;
-                super.onReady(youTubePlayer);
-            }
-        }, iFramePlayerOptions);
-        youTubePlayerView.enableBackgroundPlayback(true);
+
+
+        Intent videoServiceIntent = new Intent(this, VideoService.class);
+        videoServiceIntent.setAction(VideoService.Actions.START.toString());
+        startService(videoServiceIntent);
+
+
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(exit);
+        youTubePlayerView.release();
+    }
 }
