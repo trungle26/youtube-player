@@ -1,4 +1,4 @@
-package com.trungcoder.youtubeforcar.fragment.page1;
+package com.trungcoder.youtubeforcar.fragment.BrowseFragment;
 
 import static com.trungcoder.youtubeforcar.MainActivity.youTubePlayerView;
 
@@ -6,7 +6,6 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -21,12 +20,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.pierfrancescosoffritti.androidyoutubeplayer.core.customui.DefaultPlayerUiController;
-import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer;
-import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener;
-import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.YouTubePlayerCallback;
-import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.options.IFramePlayerOptions;
-import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView;
 import com.trungcoder.youtubeforcar.R;
 import com.trungcoder.youtubeforcar.VideoItem;
 import com.trungcoder.youtubeforcar.connector.searchConnector;
@@ -36,10 +29,10 @@ import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link page1#newInstance} factory method to
+ * Use the {@link BrowseFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class page1 extends Fragment {
+public class BrowseFragment extends Fragment {
 
     //EditText for input search keywords
     private EditText searchInput;
@@ -74,7 +67,7 @@ public class page1 extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    public page1() {
+    public BrowseFragment() {
         // Required empty public constructor
     }
 
@@ -87,8 +80,8 @@ public class page1 extends Fragment {
      * @return A new instance of fragment page1.
      */
     // TODO: Rename and change types and number of parameters
-    public static page1 newInstance(String param1, String param2) {
-        page1 fragment = new page1();
+    public static BrowseFragment newInstance(String param1, String param2) {
+        BrowseFragment fragment = new BrowseFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -109,7 +102,7 @@ public class page1 extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View rootView = inflater.inflate(R.layout.fragment_page1, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_browse, container, false);
 
         //initailising the objects with their respective view in activity_main.xml file
         mProgressDialog = new ProgressDialog(rootView.getContext());
@@ -250,21 +243,20 @@ public class page1 extends Fragment {
     private void fillYoutubeVideos(){
 
         //object of YoutubeAdapter which will fill the RecyclerView
-        youtubeAdapter = new YoutubeAdapter1(getActivity().getApplicationContext(),searchResults);
+        youtubeAdapter = new YoutubeAdapter1(youTubePlayerView.getContext(),searchResults);
 
         //setAdapter to RecyclerView
         mRecyclerView.setAdapter(youtubeAdapter);
 
-        //notify the Adapter that the data has been downloaded so that list can be updapted
+        //notify the Adapter that the data has been downloaded so that list can be updated
         youtubeAdapter.notifyDataSetChanged();
 
-        //TODO: auto play
-        youTubePlayerView.getYouTubePlayerWhenReady(new YouTubePlayerCallback() {
-            @Override
-            public void onYouTubePlayer(@NonNull YouTubePlayer youTubePlayer) {
-                youTubePlayer.loadVideo(searchResults.get(0).getId(),0);
-            }
-        });
+//        youTubePlayerView.getYouTubePlayerWhenReady(new YouTubePlayerCallback() {
+//            @Override
+//            public void onYouTubePlayer(@NonNull YouTubePlayer youTubePlayer) {
+//                youTubePlayer.loadVideo(searchResults.get(0).getId(),0);
+//            }
+//        });
     }
 
     // method for getting

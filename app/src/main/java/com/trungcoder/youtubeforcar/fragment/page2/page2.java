@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.YouTubePlayerCallback;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView;
+import com.trungcoder.youtubeforcar.MainActivity;
 import com.trungcoder.youtubeforcar.R;
 import com.trungcoder.youtubeforcar.VideoItem;
 import com.trungcoder.youtubeforcar.connector.playlistConnector;
@@ -164,7 +165,7 @@ public class page2 extends Fragment {
     private void fillYoutubeVideos(){
 
         //object of YoutubeAdapter which will fill the RecyclerView
-        youtubeAdapter2 = new YoutubeAdapter2(getActivity().getApplicationContext(),searchResults2);
+        youtubeAdapter2 = new YoutubeAdapter2(youTubePlayerView.getContext(), searchResults2);
 
         //setAdapter to RecyclerView
         mRecyclerView2.setAdapter(youtubeAdapter2);

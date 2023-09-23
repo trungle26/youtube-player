@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/miQueue"
+        android:icon="@drawable/ic_queue"
+        android:title="Queue"/>
+    <item
+        android:id="@+id/miBrowse"
+        android:icon="@drawable/ic_browse"
+        android:title="Browse"/>
+    <item
+        android:id="@+id/miWebview"
+        android:title="WebView"/>
+</menu>

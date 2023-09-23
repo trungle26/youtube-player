@@ -163,7 +163,7 @@ public class page3 extends Fragment {
     private void fillYoutubeVideos(){
 
         //object of YoutubeAdapter which will fill the RecyclerView
-        youtubeAdapter3 = new YoutubeAdapter3(getActivity().getApplicationContext(),searchResults3);
+        youtubeAdapter3 = new YoutubeAdapter3(youTubePlayerView.getContext(),searchResults3);
 
         //setAdapter to RecyclerView
         mRecyclerView3.setAdapter(youtubeAdapter3);

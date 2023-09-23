@@ -39,11 +39,11 @@ public class YoutubeAdapter2 extends RecyclerView.Adapter<YoutubeAdapter2.MyView
 
             //the video_item.xml file is now associated as view object
             //so the view can be called from view's object
-            thumbnail = (ImageView) view.findViewById(R.id.video_thumbnail);
-            video_title = (TextView) view.findViewById(R.id.video_title);
-            video_id = (TextView) view.findViewById(R.id.video_id);
-            video_description = (TextView) view.findViewById(R.id.video_description);
-            video_view = (RelativeLayout) view.findViewById(R.id.video_view);
+            thumbnail = (ImageView) view.findViewById(R.id.videoThumbnail);
+            video_title = (TextView) view.findViewById(R.id.videoTitle);
+            video_id = (TextView) view.findViewById(R.id.videoId);
+            video_description = (TextView) view.findViewById(R.id.videoDescription);
+            video_view = (RelativeLayout) view.findViewById(R.id.videoView);
         }
     }
 

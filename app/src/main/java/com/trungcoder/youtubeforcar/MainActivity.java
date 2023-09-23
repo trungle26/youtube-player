@@ -10,6 +10,7 @@ import android.content.IntentFilter;
 import android.content.pm.ActivityInfo;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
 
@@ -17,44 +18,41 @@ import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.WindowCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.core.view.WindowInsetsControllerCompat;
-import androidx.viewpager2.widget.ViewPager2;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
-import com.google.android.material.tabs.TabLayout;
-import com.google.android.material.tabs.TabLayoutMediator;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationBarView;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.FullscreenListener;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.options.IFramePlayerOptions;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView;
-import com.trungcoder.youtubeforcar.adapter.ViewPagerAdapter;
+import com.trungcoder.youtubeforcar.databinding.ActivityMainBinding;
+import com.trungcoder.youtubeforcar.fragment.BrowseFragment.BrowseFragment;
+import com.trungcoder.youtubeforcar.fragment.WebViewFragment;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import kotlin.Unit;
 import kotlin.jvm.functions.Function0;
 
 public class MainActivity extends AppCompatActivity {
 
-    private TabLayout tabLayout;
-    private ViewPager2 viewPager2;
-    public static YouTubePlayer youTubePlayer;
+    private BottomNavigationView bottomNavigationView;
+    private FragmentManager fragmentManager;
+    public static ActivityMainBinding binding;
     public static YouTubePlayerView youTubePlayerView;
     public static IFramePlayerOptions iFramePlayerOptions;
+    public static List<VideoItem> queue;
+    public static QueueAdapter queueAdapter;
+    public static int currentVideoQueueIndex = -1;
 
     //ProgressDialog can be shown while downloading data from the internet
     //which indicates that the query is being processed
     private ProgressDialog mProgressDialog;
-    private boolean isFullscreen = false;
-    private OnBackPressedCallback onBackPressedCallback = new OnBackPressedCallback(true) {
-        @Override
-        public void handleOnBackPressed() {
-            if(isFullscreen){
-                youTubePlayer.toggleFullscreen();
-
-            }else{
-                finish();
-            }
-        }
-    };
 
     private final BroadcastReceiver exit = new BroadcastReceiver() {
         @Override
@@ -66,86 +64,87 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
         registerReceiver(exit, new IntentFilter("STOP"));
 
-        tabLayout = findViewById(R.id.tabs);
-        viewPager2 = findViewById(R.id.view_pager);
-        youTubePlayerView = findViewById(R.id.youTubePlayerView);
-        FrameLayout fullscreenViewContainer = findViewById(R.id.fullscreenViewContainer);
+        queue = new ArrayList<>();
+        youTubePlayerView = binding.youTubePlayerView;
+        bottomNavigationView = binding.bottomNavigationView;
+        fragmentManager = getSupportFragmentManager();
 
-        ViewPagerAdapter adapter = new ViewPagerAdapter(this);
-        viewPager2.setAdapter(adapter);
-        viewPager2.setUserInputEnabled(false);
 
+        queueAdapter = new QueueAdapter(queue);
+        binding.rvQueue.setAdapter(queueAdapter);
+        binding.rvQueue.setLayoutManager(new LinearLayoutManager(this));
+
+        BrowseFragment browseFragment = new BrowseFragment();
+        WebViewFragment webViewFragment = new WebViewFragment();
+        bottomNavigationView.setSelectedItemId(R.id.miBrowse);
+        setFragment(browseFragment);
+        bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()){
+                    case R.id.miQueue:
+                        binding.fragmentContainer.setVisibility(View.GONE);
+                        break;
+                    case R.id.miBrowse:
+                        binding.fragmentContainer.setVisibility(View.VISIBLE);
+                        setFragment(browseFragment);
+                        break;
+                    case R.id.miWebview:
+                        binding.fragmentContainer.setVisibility(View.VISIBLE);
+                        setFragment(webViewFragment);
+                        break;
+                }
+                return true;
+            }
+        });
+
+        // Handle fullscreen view
+        FrameLayout fullscreenViewContainer = binding.fullscreenViewContainer;
         WindowInsetsControllerCompat windowInsetsController = WindowCompat.getInsetsController(getWindow(),getWindow().getDecorView());
         windowInsetsController.setSystemBarsBehavior(WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE);
 
-        getWindow().getDecorView().setOnApplyWindowInsetsListener(((view, windowInsets) -> {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                if (windowInsets.isVisible(WindowInsetsCompat.Type.navigationBars())
-                        || windowInsets.isVisible(WindowInsetsCompat.Type.statusBars())) {
-                    if(isFullscreen){
-                        windowInsetsController.hide(WindowInsetsCompat.Type.systemBars());
-                    }
-                } else {
-                    if(!isFullscreen){
-                        windowInsetsController.show(WindowInsetsCompat.Type.systemBars());
-                    }
-                }
-            }
-            return view.onApplyWindowInsets(windowInsets);
-        }));
-
-        if(Build.VERSION.SDK_INT > Build.VERSION_CODES.O){
-            NotificationChannel channel = new NotificationChannel("running_channel", "Running notifications", NotificationManager.IMPORTANCE_HIGH);
-            NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-            notificationManager.createNotificationChannel(channel);
-        }
-
-        String[] labels = {"Youtube","Nhạc US-UK","Truyện nói"};
-        (new TabLayoutMediator(tabLayout, viewPager2,
-                new TabLayoutMediator.TabConfigurationStrategy() {
-                    @Override
-                    public void onConfigureTab(@NonNull TabLayout.Tab tab, int position) {
-                        tab.setText(labels[position]);
-                    }
-                })).attach();
 
         youTubePlayerView.setEnableAutomaticInitialization(false);
-
         iFramePlayerOptions = new IFramePlayerOptions.Builder()
                 .controls(1)
                 .fullscreen(1)
                 .build();
-
         youTubePlayerView.addFullscreenListener(new FullscreenListener() {
             @Override
             public void onEnterFullscreen(@NonNull View fullscreenView, @NonNull Function0<Unit> function0) {
-                isFullscreen = true;
                 youTubePlayerView.setVisibility(View.GONE);
+                bottomNavigationView.setVisibility(View.GONE);
                 fullscreenViewContainer.setVisibility(View.VISIBLE);
                 fullscreenViewContainer.addView(fullscreenView);
                 // optionally request landscape orientation
                 setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
             }
-
             @Override
             public void onExitFullscreen() {
-                isFullscreen = false;
                 youTubePlayerView.setVisibility(View.VISIBLE);
+                bottomNavigationView.setVisibility(View.VISIBLE);
                 fullscreenViewContainer.setVisibility(View.GONE);
                 fullscreenViewContainer.removeAllViews();
                 setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
             }
         });
 
+        // Handle notification control
+        if(Build.VERSION.SDK_INT > Build.VERSION_CODES.O){
+            NotificationChannel channel = new NotificationChannel("running_channel", "Running notifications", NotificationManager.IMPORTANCE_HIGH);
+            NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            notificationManager.createNotificationChannel(channel);
+        }
 
+        // Start service
         Intent videoServiceIntent = new Intent(this, VideoService.class);
         videoServiceIntent.setAction(VideoService.Actions.START.toString());
         startService(videoServiceIntent);
-
 
     }
 
@@ -154,5 +153,13 @@ public class MainActivity extends AppCompatActivity {
         super.onDestroy();
         unregisterReceiver(exit);
         youTubePlayerView.release();
+    }
+
+    private void setFragment(Fragment fragment){
+        fragmentManager.beginTransaction()
+                .replace(R.id.fragmentContainer, fragment,null)
+                .setReorderingAllowed(true)
+                .addToBackStack(null) // Name can be null
+                .commit();
     }
 }

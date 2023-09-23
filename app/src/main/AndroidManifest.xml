@@ -7,6 +7,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+    <uses-sdk tools:overrideLibrary="com.pierfrancescosoffritti.androidyoutubeplayer.core.customui"/>
 
     <application
         android:allowBackup="true"
@@ -22,13 +23,14 @@
             android:name=".VideoService"
             android:enabled="true"
             android:exported="true"
-            android:foregroundServiceType="mediaPlayback"></service>
+            android:foregroundServiceType="mediaPlayback">
+
+        </service>
 
         <activity
             android:name=".MainActivity"
             android:configChanges="orientation|screenSize|keyboardHidden|smallestScreenSize|screenLayout"
             android:exported="true"
-            android:screenOrientation="portrait"
             android:supportsPictureInPicture="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

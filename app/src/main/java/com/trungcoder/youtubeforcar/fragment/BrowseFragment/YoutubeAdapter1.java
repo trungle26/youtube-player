@@ -1,5 +1,6 @@
-package com.trungcoder.youtubeforcar.fragment.page1;
+package com.trungcoder.youtubeforcar.fragment.BrowseFragment;
 
+import static com.trungcoder.youtubeforcar.MainActivity.queueAdapter;
 import static com.trungcoder.youtubeforcar.MainActivity.youTubePlayerView;
 
 import android.content.Context;
@@ -13,9 +14,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer;
-import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.YouTubePlayerCallback;
 import com.squareup.picasso.Picasso;
+import com.trungcoder.youtubeforcar.MainActivity;
+import com.trungcoder.youtubeforcar.QueueAdapter;
 import com.trungcoder.youtubeforcar.R;
 import com.trungcoder.youtubeforcar.VideoItem;
 
@@ -39,11 +40,11 @@ public class YoutubeAdapter1 extends RecyclerView.Adapter<YoutubeAdapter1.MyView
 
             //the video_item.xml file is now associated as view object
             //so the view can be called from view's object
-            thumbnail = (ImageView) view.findViewById(R.id.video_thumbnail);
-            video_title = (TextView) view.findViewById(R.id.video_title);
-            video_id = (TextView) view.findViewById(R.id.video_id);
-            video_description = (TextView) view.findViewById(R.id.video_description);
-            video_view = (RelativeLayout) view.findViewById(R.id.video_view);
+            thumbnail = (ImageView) view.findViewById(R.id.videoThumbnail);
+            video_title = (TextView) view.findViewById(R.id.videoTitle);
+            video_id = (TextView) view.findViewById(R.id.videoId);
+            video_description = (TextView) view.findViewById(R.id.videoDescription);
+            video_view = (RelativeLayout) view.findViewById(R.id.videoView);
         }
     }
 
@@ -103,13 +104,18 @@ public class YoutubeAdapter1 extends RecyclerView.Adapter<YoutubeAdapter1.MyView
         holder.video_view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                youTubePlayerView.getYouTubePlayerWhenReady(new YouTubePlayerCallback() {
-                    @Override
-                    public void onYouTubePlayer(@NonNull YouTubePlayer youTubePlayer) {
-                        youTubePlayer.loadVideo(singleVideo.getId(),0);
-                    }
+                MainActivity.currentVideoQueueIndex = -1;
+                youTubePlayerView.getYouTubePlayerWhenReady(youTubePlayer -> {
+                    youTubePlayer.loadVideo(singleVideo.getId(),0);
                 });
+            }
+        });
+        holder.video_view.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                MainActivity.queue.add(singleVideo);
+                queueAdapter.notifyDataSetChanged();
+                return true;
             }
         });
 
