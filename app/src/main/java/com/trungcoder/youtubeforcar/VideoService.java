@@ -81,25 +81,25 @@ public class VideoService extends Service {
 
 
         // Create PendingIntent objects
-        PendingIntent prevPendingIntent = PendingIntent.getService(this, 0, prevIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        PendingIntent pausePendingIntent = PendingIntent.getService(this, 0, pauseIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        PendingIntent nextPendingIntent = PendingIntent.getService(this, 0, nextIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        PendingIntent playPendingIntent = PendingIntent.getService(this, 0, playIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        PendingIntent exitPendingIntent = PendingIntent.getService(this, 0, exitIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+//        PendingIntent prevPendingIntent = PendingIntent.getService(this, 0, prevIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+//        PendingIntent pausePendingIntent = PendingIntent.getService(this, 0, pauseIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+//        PendingIntent nextPendingIntent = PendingIntent.getService(this, 0, nextIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+//        PendingIntent playPendingIntent = PendingIntent.getService(this, 0, playIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+//        PendingIntent exitPendingIntent = PendingIntent.getService(this, 0, exitIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        Notification notification = new NotificationCompat.Builder(this,"running_channel")
-                .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
-                .setSmallIcon(R.drawable.ic_launcher_foreground)
-                .addAction(R.drawable.ic_prev,"Previous",prevPendingIntent)
-                .addAction(R.drawable.ic_pause,"Pause",pausePendingIntent)
-                .addAction(R.drawable.ic_next,"Next",nextPendingIntent)
-                .addAction(R.drawable.ic_play,"Play",playPendingIntent)
-                .addAction(R.drawable.ic_exit,"Exit",exitPendingIntent)
-                .setStyle(new androidx.media.app.NotificationCompat.MediaStyle()
-                        .setShowActionsInCompactView(1))
-                .setContentTitle("Background Youtube playback")
-                .build();
-        startForeground(1,notification);
+//        Notification notification = new NotificationCompat.Builder(this,"running_channel")
+//                .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+//                .setSmallIcon(R.drawable.ic_launcher_foreground)
+//                .addAction(R.drawable.ic_prev,"Previous",prevPendingIntent)
+//                .addAction(R.drawable.ic_pause,"Pause",pausePendingIntent)
+//                .addAction(R.drawable.ic_next,"Next",nextPendingIntent)
+//                .addAction(R.drawable.ic_play,"Play",playPendingIntent)
+//                .addAction(R.drawable.ic_exit,"Exit",exitPendingIntent)
+//                .setStyle(new androidx.media.app.NotificationCompat.MediaStyle()
+//                        .setShowActionsInCompactView(1))
+//                .setContentTitle("Background Youtube playback")
+//                .build();
+//        startForeground(1,notification);
     }
 
     private void playNextVideo(){

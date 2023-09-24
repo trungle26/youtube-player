@@ -80,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
         binding.rvQueue.setLayoutManager(new LinearLayoutManager(this));
 
         BrowseFragment browseFragment = new BrowseFragment();
-        WebViewFragment webViewFragment = new WebViewFragment();
+//        WebViewFragment webViewFragment = new WebViewFragment();
         bottomNavigationView.setSelectedItemId(R.id.miBrowse);
         setFragment(browseFragment);
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
@@ -95,8 +95,8 @@ public class MainActivity extends AppCompatActivity {
                         setFragment(browseFragment);
                         break;
                     case R.id.miWebview:
-                        binding.fragmentContainer.setVisibility(View.VISIBLE);
-                        setFragment(webViewFragment);
+//                        binding.fragmentContainer.setVisibility(View.VISIBLE);
+//                        setFragment(webViewFragment);
                         break;
                 }
                 return true;
@@ -135,11 +135,11 @@ public class MainActivity extends AppCompatActivity {
         });
 
         // Handle notification control
-        if(Build.VERSION.SDK_INT > Build.VERSION_CODES.O){
-            NotificationChannel channel = new NotificationChannel("running_channel", "Running notifications", NotificationManager.IMPORTANCE_HIGH);
-            NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-            notificationManager.createNotificationChannel(channel);
-        }
+//        if(Build.VERSION.SDK_INT > Build.VERSION_CODES.O){
+//            NotificationChannel channel = new NotificationChannel("running_channel", "Running notifications", NotificationManager.IMPORTANCE_HIGH);
+//            NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+//            notificationManager.createNotificationChannel(channel);
+//        }
 
         // Start service
         Intent videoServiceIntent = new Intent(this, VideoService.class);
